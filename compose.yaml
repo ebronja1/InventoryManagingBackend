@@ -1,0 +1,36 @@
+﻿version: "3.8"
+
+services:
+  pgdb:
+    image: postgres
+    container_name: pgdb
+    environment:
+      - POSTGRES_USER=emir
+      - POSTGRES_PASSWORD=emir
+    ports:
+      - "5000:5432"
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com  # Set the admin email
+      - PGADMIN_DEFAULT_PASSWORD=admin        # Set the admin password
+    ports:
+      - "8081:80"  # Exposes pgAdmin on port 8080
+    depends_on:
+      - pgdb  # Ensures pgAdmin starts after PostgreSQL
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin  # Persist pgAdmin data
+
+volumes:
+  db-volume:
+    external: true
+    name: db-volume-pg
+  pgadmin-data:
+    external: false
+
+
+
